@@ -1,5 +1,6 @@
 package me.clickism.clickshop.shop;
 
+import me.clickism.clickshop.Main;
 import me.clickism.clickshop.data.Setting;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -54,7 +55,14 @@ public abstract class DisplayHandler {
     protected static void removeDisplayIfExists(@Nullable UUID uuid) {
         if (uuid == null) return;
         Entity entity = Bukkit.getEntity(uuid);
-        if (entity != null) entity.remove();
+        if (entity == null || entity.isDead()) {
+            return;
+        }
+        Main.getMain().getFoliaLib().getScheduler().runAtEntityWithFallback(entity, task -> {
+            if (!entity.isDead()) {
+                entity.remove();
+            }
+        }, null);
     }
 
     protected static boolean exists(UUID uuid) {

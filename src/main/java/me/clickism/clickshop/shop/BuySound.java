@@ -28,7 +28,7 @@ public enum BuySound {
     public void playSound(Player player) {
         if (sound == null) return;
         player.playSound(player, sound, 1f, 1f);
-        Bukkit.getScheduler().runTaskLater(Main.getMain(), task -> {
+        Main.getMain().getFoliaLib().getScheduler().runAtEntityLater(player, task -> {
             player.playSound(player, sound, 1f, 2f);
         }, 2L);
     }

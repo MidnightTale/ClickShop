@@ -1,5 +1,6 @@
 package me.clickism.clickshop.events;
 
+import me.clickism.clickshop.Main;
 import me.clickism.clickshop.shop.ItemShop;
 import me.clickism.clickshop.shop.Pile;
 import org.bukkit.block.Block;
@@ -12,21 +13,25 @@ public class PistonEvent implements Listener {
 
     @EventHandler
     public void onPiston(BlockPistonExtendEvent event) {
-        for (Block block : event.getBlocks()) {
-            if (ItemShop.get(block.getLocation()) != null || Pile.get(block.getLocation()) != null) {
-                event.setCancelled(true);
-                return;
+        Main.getMain().getFoliaLib().getScheduler().runAtLocation(event.getBlock().getLocation(), task -> {
+            for (Block block : event.getBlocks()) {
+                if (ItemShop.get(block.getLocation()) != null || Pile.get(block.getLocation()) != null) {
+                    event.setCancelled(true);
+                    return;
+                }
             }
-        }
+        });
     }
 
     @EventHandler
     public void onPiston(BlockPistonRetractEvent event) {
-        for (Block block : event.getBlocks()) {
-            if (ItemShop.get(block.getLocation()) != null || Pile.get(block.getLocation()) != null) {
-                event.setCancelled(true);
-                return;
+        Main.getMain().getFoliaLib().getScheduler().runAtLocation(event.getBlock().getLocation(), task -> {
+            for (Block block : event.getBlocks()) {
+                if (ItemShop.get(block.getLocation()) != null || Pile.get(block.getLocation()) != null) {
+                    event.setCancelled(true);
+                    return;
+                }
             }
-        }
+        });
     }
 }

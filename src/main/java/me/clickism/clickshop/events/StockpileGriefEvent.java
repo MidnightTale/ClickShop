@@ -20,14 +20,16 @@ public class StockpileGriefEvent implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onPlace(BlockPlaceEvent event) {
-        if (event.getBlock().getType() != Material.HOPPER) return;
-        Location above = event.getBlock().getRelative(BlockFace.UP).getLocation();
-        Player player = event.getPlayer();
-        if (Permission.BYPASS_STOCKPILE.has(player)) return;
-        if (isStockpileAndNotOwner(above, player)) {
-            Message.STOCKPILE_NO_HOPPER.send(player);
-            event.setCancelled(true);
-        }
+        Main.getMain().getFoliaLib().getScheduler().runAtLocation(event.getBlock().getLocation(), task -> {
+            if (event.getBlock().getType() != Material.HOPPER) return;
+            Location above = event.getBlock().getRelative(BlockFace.UP).getLocation();
+            Player player = event.getPlayer();
+            if (Permission.BYPASS_STOCKPILE.has(player)) return;
+            if (isStockpileAndNotOwner(above, player)) {
+                Message.STOCKPILE_NO_HOPPER.send(player);
+                event.setCancelled(true);
+            }
+        });
     }
 
     @EventHandler(ignoreCancelled = true)

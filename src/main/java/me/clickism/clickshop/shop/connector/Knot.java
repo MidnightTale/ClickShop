@@ -1,5 +1,6 @@
 package me.clickism.clickshop.shop.connector;
 
+import me.clickism.clickshop.Main;
 import me.clickism.clickshop.shop.DisplayHandler;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -35,8 +36,10 @@ public class Knot extends DisplayHandler {
         BlockDisplay display = (BlockDisplay) spawnDisplay(location, EntityType.BLOCK_DISPLAY);
         display.setBlock(Material.OAK_FENCE.createBlockData());
 
-        boolean isBottomSlab = isBottomSlab(location.getBlock().getRelative(BlockFace.DOWN).getLocation());
-        display.setTransformation(isBottomSlab ? SLAB_TRANSFORMATION : BASE_TRANSFORMATION);
+        Main.getMain().getFoliaLib().getScheduler().runAtLocation(location, task -> {
+            boolean isBottomSlab = isBottomSlab(location.getBlock().getRelative(BlockFace.DOWN).getLocation());
+            display.setTransformation(isBottomSlab ? SLAB_TRANSFORMATION : BASE_TRANSFORMATION);
+        });
 
         return display;
     }
@@ -56,8 +59,8 @@ public class Knot extends DisplayHandler {
 
     private Location calculateAnchor() {
         Location block = to.getLocation().getBlock().getLocation();
-        anchor = findGroundAnchor(block);
-        return adjustHeight(anchor, to);
+        Location groundAnchor = findGroundAnchor(block);
+        return adjustHeight(groundAnchor, to);
     }
 
     private static final int MAX_DOWNWARDS_CHECK = 6;

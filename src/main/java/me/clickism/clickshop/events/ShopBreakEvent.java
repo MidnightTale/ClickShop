@@ -1,5 +1,6 @@
 package me.clickism.clickshop.events;
 
+import me.clickism.clickshop.Main;
 import me.clickism.clickshop.data.Message;
 import me.clickism.clickshop.data.Permission;
 import me.clickism.clickshop.shop.ItemShop;

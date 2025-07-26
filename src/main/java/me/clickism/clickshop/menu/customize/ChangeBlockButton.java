@@ -1,5 +1,6 @@
 package me.clickism.clickshop.menu.customize;
 
+import me.clickism.clickshop.Main;
 import me.clickism.clickshop.data.Message;
 import me.clickism.clickshop.menu.ShopButton;
 import me.clickism.clickshop.shop.ItemShop;
@@ -55,20 +56,22 @@ public class ChangeBlockButton extends ShopButton {
         Message.BLOCK_CHANGE.parameterizer()
                 .put("block", Utils.capitalize(newType.toString().replace('_', ' ').toLowerCase()))
                 .send(player);
-        shopBlock.setType(newType);
-        if (shopBlock.getBlockData() instanceof Directional) {
-            Directional blockData = (Directional) shopBlock.getBlockData();
-            if (player.getLocation().getPitch() < -45) {
-                // Looking up
-                blockData.setFacing(BlockFace.UP);
-            } else if (player.getLocation().getPitch() > 45) {
-                // Looking down
-                blockData.setFacing(BlockFace.DOWN);
-            } else {
-                blockData.setFacing(player.getFacing().getOppositeFace());
+        Main.getMain().getFoliaLib().getScheduler().runAtLocation(shopBlock.getLocation(), task -> {
+            shopBlock.setType(newType);
+            if (shopBlock.getBlockData() instanceof Directional) {
+                Directional blockData = (Directional) shopBlock.getBlockData();
+                if (player.getLocation().getPitch() < -45) {
+                    // Looking up
+                    blockData.setFacing(BlockFace.UP);
+                } else if (player.getLocation().getPitch() > 45) {
+                    // Looking down
+                    blockData.setFacing(BlockFace.DOWN);
+                } else {
+                    blockData.setFacing(player.getFacing().getOppositeFace());
+                }
+                shopBlock.setBlockData(blockData);
             }
-            shopBlock.setBlockData(blockData);
-        }
+        });
 
         //Reduce cursor item amount
         cursor.setAmount(cursor.getAmount() - 1);

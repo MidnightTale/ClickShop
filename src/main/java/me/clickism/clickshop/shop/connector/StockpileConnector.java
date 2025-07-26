@@ -23,11 +23,13 @@ public class StockpileConnector extends Connector {
     @Override
     public void handleConnection(Location target) {
         Player player = getPlayer();
-        Material mat = target.getBlock().getType();
-        if (shop == null || ItemShop.get(target) != null || (mat != Material.CHEST && mat != Material.BARREL)) {
-            Message.CONNECTOR_INVALID.send(player);
-            return;
-        }
+        Main.getMain().getFoliaLib().getScheduler().runAtLocation(target, task -> {
+            Material mat = target.getBlock().getType();
+            if (shop == null || ItemShop.get(target) != null || (mat != Material.CHEST && mat != Material.BARREL)) {
+                Message.CONNECTOR_INVALID.send(player);
+                return;
+            }
+        });
         Location center = getCenter(target);
         if (shop.getStockpileSet().contains(center)) {
             shop.removeStockpile(center);
@@ -58,10 +60,11 @@ public class StockpileConnector extends Connector {
         if (!(state instanceof InventoryHolder)) {
             return location;
         }
-        InventoryHolder holder = ((InventoryHolder) state).getInventory().getHolder();
-        if (holder == null) return location;
+        InventoryHolder holder = (InventoryHolder) state;
+        if (holder.getInventory().getHolder() == null) {
+            return location;
+        }
         return holder.getInventory().getLocation();
-
     }
 
     @Override

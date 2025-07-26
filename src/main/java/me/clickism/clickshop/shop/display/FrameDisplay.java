@@ -1,5 +1,6 @@
 package me.clickism.clickshop.shop.display;
 
+import me.clickism.clickshop.Main;
 import me.clickism.clickshop.shop.ItemShop;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -31,9 +32,11 @@ public class FrameDisplay extends ShopDisplay {
      */
     public FrameDisplay(ItemShop shop) throws IllegalArgumentException {
         super(shop, ShopDisplayType.FRAME);
-        if (shop.getLocation().getBlock().getType() == Material.CHEST) {
-            throw new IllegalArgumentException("Shop block can't be a chest for frame displays!");
-        }
+        Main.getMain().getFoliaLib().getScheduler().runAtLocation(shop.getLocation(), task -> {
+            if (shop.getLocation().getBlock().getType() == Material.CHEST) {
+                throw new IllegalArgumentException("Shop block can't be a chest for frame displays!");
+            }
+        });
     }
 
     private FrameDisplay(UUID topUUID, UUID bottomUUID, UUID itemUUID) {
@@ -89,14 +92,16 @@ public class FrameDisplay extends ShopDisplay {
 
         prepareFrameDisplays();
         // Set up frame displays
-        BlockDisplay top = getBlockDisplay(topUUID);
-        BlockDisplay bottom = getBlockDisplay(bottomUUID);
+        Main.getMain().getFoliaLib().getScheduler().runAtLocation(getShop().getLocation(), task -> {
+            BlockDisplay top = getBlockDisplay(topUUID);
+            BlockDisplay bottom = getBlockDisplay(bottomUUID);
 
-        top.setBlock(material.createBlockData());
-        bottom.setBlock(material.createBlockData());
+            top.setBlock(material.createBlockData());
+            bottom.setBlock(material.createBlockData());
 
-        top.setTransformation(TOP_FRAME_TRANSFORMATION);
-        bottom.setTransformation(BOTTOM_FRAME_TRANSFORMATION);
+            top.setTransformation(TOP_FRAME_TRANSFORMATION);
+            bottom.setTransformation(BOTTOM_FRAME_TRANSFORMATION);
+        });
     }
 
     private void prepareFrameDisplays() {

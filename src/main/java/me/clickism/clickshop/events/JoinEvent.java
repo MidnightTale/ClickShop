@@ -10,7 +10,7 @@ public class JoinEvent implements Listener {
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
-        Bukkit.getScheduler().runTaskLater(Main.getMain(), task -> {
+        Main.getMain().getFoliaLib().getScheduler().runAtEntityLater(event.getPlayer(), task -> {
             Main.getMain().getShopManager().sendWarning(event.getPlayer());
         }, 20L);
     }

@@ -25,7 +25,7 @@ public class ChatInputListener implements Listener {
 
     public void addChatCallback(Player player, Consumer<String> callback, long timeoutTicks, Message cancelMessage) {
         callbackMap.put(player, callback);
-        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+        Main.getMain().getFoliaLib().getScheduler().runAtEntityLater(player, task -> {
             if (callbackMap.get(player) == callback) {
                 callbackMap.remove(player);
                 cancelMessage.send(player);

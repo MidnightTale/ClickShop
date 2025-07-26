@@ -1,5 +1,6 @@
 package me.clickism.clickshop.shop.connector;
 
+import me.clickism.clickshop.Main;
 import me.clickism.clickshop.shop.DisplayHandler;
 import org.bukkit.Location;
 import org.bukkit.Material;

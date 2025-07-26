@@ -1,5 +1,6 @@
 package me.clickism.clickshop.shop.display;
 
+import me.clickism.clickshop.Main;
 import me.clickism.clickshop.shop.ItemShop;
 import me.clickism.clickshop.utils.Utils;
 import org.bukkit.Location;
@@ -46,10 +47,12 @@ public class GlassDisplay extends ShopDisplay {
         super(shop, ShopDisplayType.GLASS);
         Location location = shop.getLocation();
 
-        Material blockAbove = location.getBlock().getRelative(BlockFace.UP).getType();
-        if (blockAbove != Material.AIR && blockAbove != Material.LIGHT) {
-            throw new IllegalArgumentException("Block above must be air or light for glass displays!");
-        }
+        Main.getMain().getFoliaLib().getScheduler().runAtLocation(location, task -> {
+            Material blockAbove = location.getBlock().getRelative(BlockFace.UP).getType();
+            if (blockAbove != Material.AIR && blockAbove != Material.LIGHT) {
+                throw new IllegalArgumentException("Block above must be air or light for glass displays!");
+            }
+        });
     }
 
     private GlassDisplay(UUID glassUUID, UUID baseUUID, UUID itemUUID, UUID textUUID) {
@@ -62,27 +65,29 @@ public class GlassDisplay extends ShopDisplay {
 
     @Override
     protected void updateDisplay() {
-        boolean isChest = getShop().getLocation().getBlock().getType() == Material.CHEST;
+        Main.getMain().getFoliaLib().getScheduler().runAtLocation(getShop().getLocation(), task -> {
+            boolean isChest = getShop().getLocation().getBlock().getType() == Material.CHEST;
 
-        // Update transformations
-        BlockDisplay glass = getBlockDisplay(glassUUID);
-        glass.setTransformation(getGlassTransformation(isChest));
-        if (glass.getBlock().getMaterial() == Material.AIR) {
-            glass.setBlock(DEFAULT_GLASS.createBlockData());
-        }
-        BlockDisplay base = getBlockDisplay(baseUUID);
-        base.setTransformation(getGlassTransformation(isChest));
-        if (base.getBlock().getMaterial() == Material.AIR) {
-            base.setBlock(DEFAULT_BASE.createBlockData());
-        }
-        base.setTransformation(getBaseTransformation(isChest));
+            // Update transformations
+            BlockDisplay glass = getBlockDisplay(glassUUID);
+            glass.setTransformation(getGlassTransformation(isChest));
+            if (glass.getBlock().getMaterial() == Material.AIR) {
+                glass.setBlock(DEFAULT_GLASS.createBlockData());
+            }
+            BlockDisplay base = getBlockDisplay(baseUUID);
+            base.setTransformation(getGlassTransformation(isChest));
+            if (base.getBlock().getMaterial() == Material.AIR) {
+                base.setBlock(DEFAULT_BASE.createBlockData());
+            }
+            base.setTransformation(getBaseTransformation(isChest));
 
-        ItemDisplay item = getItemDisplay(itemUUID);
-        ItemStack product = getShop().getProducts().get(0).clone();
-        item.setTransformation(getItemTransformation(product.getType(), isChest));
+            ItemDisplay item = getItemDisplay(itemUUID);
+            ItemStack product = getShop().getProducts().get(0).clone();
+            item.setTransformation(getItemTransformation(product.getType(), isChest));
 
-        item.setItemStack(product);
-        item.setBillboard(Display.Billboard.VERTICAL);
+            item.setItemStack(product);
+            item.setBillboard(Display.Billboard.VERTICAL);
+        });
     }
 
     @Override
@@ -111,10 +116,12 @@ public class GlassDisplay extends ShopDisplay {
 
     @Override
     public void clear() {
-        Block above = getShop().getLocation().getBlock().getRelative(BlockFace.UP);
-        if (above.getType() == Material.LIGHT) {
-            above.setType(Material.AIR);
-        }
+        Main.getMain().getFoliaLib().getScheduler().runAtLocation(getShop().getLocation(), task -> {
+            Block above = getShop().getLocation().getBlock().getRelative(BlockFace.UP);
+            if (above.getType() == Material.LIGHT) {
+                above.setType(Material.AIR);
+            }
+        });
         removeDisplayIfExists(glassUUID);
         removeDisplayIfExists(baseUUID);
         removeDisplayIfExists(itemUUID);
@@ -151,7 +158,7 @@ public class GlassDisplay extends ShopDisplay {
 
     private void setMaterial(UUID uuid, Material material) {
         if (!exists(uuid)) return;
-        getBlockDisplay(uuid).setBlock(material.createBlockData());
+        Main.getMain().getFoliaLib().getScheduler().runAtLocation(getShop().getLocation(), task -> getBlockDisplay(uuid).setBlock(material.createBlockData()));
     }
 
     private Transformation getGlassTransformation(boolean isChest) {

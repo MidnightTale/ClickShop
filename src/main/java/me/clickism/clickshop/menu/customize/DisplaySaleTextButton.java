@@ -62,7 +62,7 @@ public class DisplaySaleTextButton extends ModifyDisplayButton {
         player.closeInventory();
         Message.SALE_TEXT_TYPE.send(player);
         Main.getMain().getChatInputListener().addChatCallback(player, (String message) -> {
-            Bukkit.getScheduler().runTask(Main.getMain(), () -> {
+            Main.getMain().getFoliaLib().getScheduler().runAtEntity(player, task -> {
                 if (!GlassDisplay.isValidSaleText(message)) {
                     Message.SALE_TEXT_INVALID.send(player);
                     return;

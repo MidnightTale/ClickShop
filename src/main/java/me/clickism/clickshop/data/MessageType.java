@@ -18,7 +18,7 @@ public enum MessageType {
         @Override
         public void playSound(Player player) {
             player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 1f, 1f);
-            Bukkit.getScheduler().runTaskLater(Main.getMain(), task -> {
+            Main.getMain().getFoliaLib().getScheduler().runAtEntityLater(player, task -> {
                 player.playSound(player, Sound.BLOCK_NOTE_BLOCK_CHIME, 1f, 2f);
             }, 2L);
         }
@@ -33,7 +33,7 @@ public enum MessageType {
         @Override
         public void playSound(Player player) {
             player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 1f, 1f);
-            Bukkit.getScheduler().runTaskLater(Main.getMain(), task -> {
+            Main.getMain().getFoliaLib().getScheduler().runAtEntityLater(player, task -> {
                 player.playSound(player, Sound.BLOCK_NOTE_BLOCK_CHIME, 1f, 2f);
             }, 2L);
         }

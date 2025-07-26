@@ -83,10 +83,10 @@ public abstract class Connector {
     protected void connectEffect(Player player, Location target) {
         player.spawnParticle(Particle.SONIC_BOOM, target.clone().add(.5, .5, .5), 1, 0, 0, 0, 2);
         player.playSound(player, Sound.BLOCK_AMETHYST_BLOCK_FALL, 1f, 1f);
-        Bukkit.getScheduler().runTaskLater(Main.getMain(), task -> {
+        Main.getMain().getFoliaLib().getScheduler().runAtEntityLater(player, task -> {
             player.playSound(player, Sound.BLOCK_AMETHYST_BLOCK_FALL, 1f, 1.5f);
         }, 4L);
-        Bukkit.getScheduler().runTaskLater(Main.getMain(), task -> {
+        Main.getMain().getFoliaLib().getScheduler().runAtEntityLater(player, task -> {
             player.playSound(player, Sound.BLOCK_AMETHYST_BLOCK_FALL, 1f, 2f);
         }, 6L);
     }

@@ -1,5 +1,6 @@
 package me.clickism.clickshop.shop.connector;
 
+import me.clickism.clickshop.Main;
 import me.clickism.clickshop.data.Setting;
 import org.bukkit.Location;
 import org.bukkit.Sound;
@@ -45,7 +46,7 @@ public class Tether {
         Location voidLocation = from.getLocation();
         voidLocation.setY(-100);
         from.setLeashHolder(null);
-        from.teleport(voidLocation);
+        Main.getMain().getFoliaLib().getScheduler().teleportAsync(from, voidLocation);
         from.setHealth(0d);
 
         if (knot != null) {
@@ -55,7 +56,7 @@ public class Tether {
         if (to instanceof Player) return;
 
         to.setLeashHolder(null);
-        to.teleport(voidLocation);
+        Main.getMain().getFoliaLib().getScheduler().teleportAsync(to, voidLocation);
         to.setHealth(0d);
     }
 
@@ -82,7 +83,7 @@ public class Tether {
 
         createSubtether();
         connector.sendTitle(player); // Refresh title
-        player.playSound(player, Sound.ENTITY_LEASH_KNOT_PLACE, 1f, 1f);
+        player.playSound(player, Sound.ITEM_LEAD_TIED, 1f, 1f);
     }
 
     private static final int MIN_ALERT_DISTANCE = 2;

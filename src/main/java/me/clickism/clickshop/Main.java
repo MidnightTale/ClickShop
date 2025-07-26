@@ -1,5 +1,6 @@
 package me.clickism.clickshop;
 
+import com.tcoded.folialib.FoliaLib;
 import me.clickism.clickshop.data.DataManager;
 import me.clickism.clickshop.data.Message;
 import me.clickism.clickshop.data.Setting;
@@ -24,6 +25,8 @@ import java.io.IOException;
 
 public final class Main extends JavaPlugin {
 
+    private FoliaLib foliaLib;
+    
     static {
         ConfigurationSerialization.registerClass(ItemShop.class, "ItemShop");
         ConfigurationSerialization.registerClass(Pile.class, "Pile");
@@ -44,7 +47,7 @@ public final class Main extends JavaPlugin {
     @Override
     public void onEnable() {
         plugin = this;
-
+        foliaLib = new FoliaLib(this);
         loadData();
         initializeAllManagers();
         registerAllEvents();
@@ -68,6 +71,9 @@ public final class Main extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        if (foliaLib != null) {
+            foliaLib.getScheduler().cancelAllTasks();
+        }
         if (menuListener != null) menuListener.closeActiveMenus();
         if (connectorManager != null) connectorManager.cancelAllConnections();
         saveData();
@@ -165,6 +171,10 @@ public final class Main extends JavaPlugin {
 
     public ShopManager getShopManager() {
         return shopManager;
+    }
+
+    public FoliaLib getFoliaLib() {
+        return foliaLib;
     }
 
     private ConnectorManager connectorManager;

@@ -1,5 +1,6 @@
 package me.clickism.clickshop.shop.connector;
 
+import me.clickism.clickshop.Main;
 import me.clickism.clickshop.data.Message;
 import me.clickism.clickshop.shop.ItemShop;
 import me.clickism.clickshop.shop.Pile;
